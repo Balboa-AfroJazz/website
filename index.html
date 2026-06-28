@@ -1,0 +1,370 @@
+<!--
+  BALBOA - AFROJAZZ — working site prototype (v0.1)
+  Single self-contained file. No build step, no dependencies.
+  Deployable as-is to Cloudflare Pages / GitHub Pages (free).
+
+  CONTENT NOTES (swap these for the real thing later):
+   - Logo: the hero uses a CSS wordmark as a placeholder.
+     Drop your real mask logo image into <div class="logo-plinth"> (replace the .wordmark block with <img>).
+   - Media: cards are styled placeholders. Replace each .video-card's onclick / inner with a real
+     <iframe> YouTube embed (or keep as click-through links to the videos).
+   - Shows: dates marked "—" need confirming from your Facebook past-events list.
+   - Contact form: static sites can't send mail alone. Wire the form to a free service
+     like Formspree (action="https://formspree.io/f/XXXX") or use the mailto fallback already on the button.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balboa — Afrojazz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F0F16;
+    --bg-2:#15151F;
+    --plinth:#26201C;
+    --orange:#E85D2C;
+    --orange-soft:#F0976B;
+    --cream:#F4EDE4;
+    --text:#E7E4DF;
+    --muted:#8A8A97;
+    --line:rgba(255,255,255,.10);
+    --mono:'Space Mono',ui-monospace,monospace;
+    --display:'Bricolage Grotesque',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--display);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    line-height:1.55;
+  }
+  /* subtle grain + warm glow for atmosphere */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(900px 600px at 50% -5%, rgba(232,93,44,.13), transparent 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* ---------- NAV ---------- */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(8px);
+    background:linear-gradient(var(--bg),rgba(15,15,22,.6) 70%,transparent);}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+  .brand{display:flex;align-items:center;gap:12px;cursor:pointer;background:none;border:0;color:var(--text)}
+  .brand .mark{width:34px;height:34px;border:1.5px solid var(--orange);border-radius:6px;
+    display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--orange);font-size:15px;background:var(--plinth)}
+  .brand .name{font-family:var(--mono);font-size:15px;letter-spacing:.02em}
+  .menu{display:flex;gap:30px;align-items:center}
+  .menu button{background:none;border:0;color:var(--muted);font-family:var(--mono);font-size:14px;
+    cursor:pointer;letter-spacing:.04em;padding:4px 0;position:relative;transition:color .25s}
+  .menu button::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:0;background:var(--orange);transition:width .28s}
+  .menu button:hover{color:var(--text)}
+  .menu button.active{color:var(--cream)}
+  .menu button.active::after{width:100%}
+  .burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:6px}
+  .burger span{width:24px;height:2px;background:var(--text);transition:.3s}
+
+  /* ---------- PAGES ---------- */
+  .page{display:none;animation:fade .5s ease both}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .page-title{font-family:var(--display);font-weight:800;font-size:clamp(40px,7vw,76px);
+    letter-spacing:-.02em;line-height:1;margin:54px 0 8px}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase}
+
+  /* ---------- HOME ---------- */
+  .hero{min-height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 0 60px}
+  .logo-plinth{background:var(--plinth);border:1px solid var(--line);border-radius:14px;
+    padding:clamp(34px,6vw,68px) clamp(30px,7vw,90px);position:relative;
+    box-shadow:0 40px 90px -40px rgba(0,0,0,.8);animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+  .logo-plinth::before{content:"";position:absolute;inset:0;border-radius:14px;
+    background:radial-gradient(120% 120% at 70% 20%,rgba(232,93,44,.12),transparent 55%);pointer-events:none}
+  .wordmark{display:flex;align-items:center;gap:clamp(16px,3vw,34px)}
+  .wordmark .face{width:clamp(80px,13vw,150px);height:clamp(110px,17vw,190px);flex:none;
+    background:linear-gradient(105deg,var(--orange) 0 52%,#7a3b25 52% 100%);
+    border-radius:48% 48% 46% 46%/55% 55% 45% 45%;position:relative;transform:rotate(-3deg)}
+  .wordmark .face::after{content:"";position:absolute;left:30%;top:34%;width:14%;height:7%;background:#1c1410;border-radius:50%;
+    box-shadow:30px 0 0 #1c1410}
+  .wordmark .stack{text-align:left}
+  .wordmark .stack b{display:block;font-family:var(--display);font-weight:800;color:var(--orange);
+    font-size:clamp(46px,9vw,104px);line-height:.82;letter-spacing:-.03em}
+  .wordmark .stack b:first-child{color:#9a5238}
+  .wordmark .stack small{display:block;font-family:var(--mono);font-weight:700;color:var(--cream);
+    letter-spacing:.42em;font-size:clamp(11px,1.7vw,18px);margin-top:10px;padding-left:4px}
+  .tagline{font-family:var(--mono);font-size:clamp(16px,2.4vw,22px);color:var(--text);margin-top:30px;letter-spacing:.02em;
+    animation:rise .8s .15s both}
+  .cta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap;justify-content:center;animation:rise .8s .3s both}
+  .btn{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.05em;cursor:pointer;
+    padding:15px 40px;border-radius:40px;border:1.5px solid var(--orange);transition:transform .2s,background .2s,color .2s}
+  .btn.solid{background:var(--orange);color:#1a0f09;border-color:var(--orange)}
+  .btn.ghost{background:transparent;color:var(--orange)}
+  .btn:hover{transform:translateY(-2px)}
+  .btn.solid:hover{background:var(--orange-soft);border-color:var(--orange-soft)}
+  .btn.ghost:hover{background:rgba(232,93,44,.12)}
+  .socials{display:flex;gap:22px;margin-top:46px;animation:rise .8s .45s both}
+  .socials a{color:var(--muted);transition:color .2s,transform .2s}
+  .socials a:hover{color:var(--orange);transform:translateY(-2px)}
+  .socials svg{width:24px;height:24px;display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:46px;align-items:start;margin-top:34px}
+  .about-photo{aspect-ratio:4/3;border-radius:12px;border:1px solid var(--line);
+    background:linear-gradient(135deg,#211b18,#15151f);display:grid;place-items:center;color:var(--muted);
+    font-family:var(--mono);font-size:13px;text-align:center;padding:20px;overflow:hidden}
+  .bio p{margin-bottom:16px;color:#d7d4ce;font-size:17px;max-width:54ch}
+  .bio p.lead{font-size:19px;color:var(--text)}
+  .lineup{margin-top:30px}
+  .lineup h3{font-family:var(--mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+  .lineup ul{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 26px}
+  .lineup li{font-family:var(--mono);font-size:14px;color:#cfccc6;display:flex;justify-content:space-between;
+    gap:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .lineup li span{color:var(--muted);font-size:12px;text-align:right}
+
+  /* ---------- MEDIA ---------- */
+  .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:34px}
+  .video-card{aspect-ratio:16/9;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;
+    border:1px solid var(--line);background:#000;transition:transform .25s,border-color .25s}
+  .video-card:hover{transform:translateY(-3px);border-color:var(--orange)}
+  .video-card .thumb{position:absolute;inset:0;background:linear-gradient(135deg,#2a2320,#101018);
+    display:grid;place-items:center}
+  .video-card .play{width:62px;height:44px;background:rgba(232,93,44,.92);border-radius:11px;display:grid;place-items:center;position:relative;z-index:2}
+  .video-card .play::after{content:"";border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+  .video-card .label{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px 16px;
+    background:linear-gradient(transparent,rgba(0,0,0,.85));font-family:var(--mono)}
+  .video-card .label b{display:block;font-size:14px;color:#fff;font-weight:700}
+  .video-card .label small{color:var(--muted);font-size:12px}
+  .video-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
+  .media-note{margin-top:26px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+
+  /* ---------- SHOWS ---------- */
+  .shows-block{margin-top:36px}
+  .shows-block h3{font-family:var(--display);font-weight:700;font-size:30px;margin-bottom:6px}
+  .gig{display:flex;align-items:center;justify-content:space-between;gap:18px;
+    padding:18px 0;border-bottom:1px solid var(--line)}
+  .gig .date{font-family:var(--mono);font-size:15px;color:var(--cream);min-width:120px}
+  .gig .venue{flex:1;font-size:17px;color:var(--text)}
+  .gig .city{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
+  .booking{margin-top:18px;padding:26px;border:1px dashed var(--line);border-radius:12px;
+    background:rgba(232,93,44,.05)}
+  .booking p{color:#d7d4ce;margin-bottom:14px}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--orange);border:1px solid var(--orange);
+    border-radius:20px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:46px;margin-top:34px;align-items:start}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+  .field input,.field textarea{width:100%;background:var(--bg-2);border:1px solid var(--line);border-radius:9px;
+    color:var(--text);font-family:var(--display);font-size:16px;padding:13px 15px;transition:border-color .2s}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--orange)}
+  .field textarea{min-height:130px;resize:vertical}
+  .contact-side p{color:#d7d4ce;margin-bottom:18px}
+  .contact-side a{color:var(--orange);text-decoration:none;font-family:var(--mono)}
+  .contact-side a:hover{text-decoration:underline}
+
+  footer{text-align:center;padding:60px 0 40px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
+  footer .dot{color:var(--orange)}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:780px){
+    .menu{position:fixed;inset:0 0 auto 0;top:78px;flex-direction:column;gap:0;
+      background:var(--bg-2);border-bottom:1px solid var(--line);padding:0;
+      max-height:0;overflow:hidden;transition:max-height .3s}
+    .menu.open{max-height:320px}
+    .menu button{padding:18px 28px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
+    .menu button::after{display:none}
+    .burger{display:flex}
+    .about-grid,.contact-grid{grid-template-columns:1fr;gap:30px}
+    .video-grid{grid-template-columns:1fr}
+    .lineup ul{grid-template-columns:1fr}
+    .gig{flex-wrap:wrap;gap:4px 14px}
+    .gig .date{min-width:auto}
+    .gig .city{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <button class="brand" onclick="go('home')">
+        <span class="mark">B</span>
+        <span class="name">Balboa — Afrojazz</span>
+      </button>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="menu" id="menu">
+        <button data-page="about" onclick="go('about')">About</button>
+        <button data-page="media" onclick="go('media')">Media</button>
+        <button data-page="shows" onclick="go('shows')">Shows</button>
+        <button data-page="contact" onclick="go('contact')">Contact</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ HOME ============ -->
+  <section class="page active" id="home">
+    <div class="hero">
+      <!-- LOGO PLACEHOLDER — replace .wordmark with your real mask logo <img> -->
+      <div class="logo-plinth">
+        <div class="wordmark">
+          <div class="face"></div>
+          <div class="stack">
+            <b>BAL</b><b>BOA</b>
+            <small>A F R O J A Z Z</small>
+          </div>
+        </div>
+      </div>
+      <p class="tagline">AfroFunk. Jazz. Dance!</p>
+      <div class="cta">
+        <button class="btn solid" onclick="window.open('https://balboa-afrojazz.bandcamp.com/','_blank')">LISTEN</button>
+        <button class="btn ghost" onclick="go('shows')">SHOWS</button>
+      </div>
+      <div class="socials">
+        <a href="https://www.facebook.com/Balboa.Afrojazz" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+        <a href="https://www.instagram.com/balboa_eindhoven_afrojazz/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://balboa-afrojazz.bandcamp.com/" target="_blank" aria-label="Bandcamp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="page" id="about">
+    <div class="eyebrow">Eindhoven, NL — 8-piece live band</div>
+    <h1 class="page-title">About</h1>
+    <div class="about-grid">
+      <div>
+        <div class="bio">
+          <p class="lead">Balboa is an eight-piece live band from Eindhoven, performing originals influenced by Afrofunk from the 70s.</p>
+          <p>Names like Ebo Taylor, Hugh Masakela and Fela Kuti are the sources of inspiration. On top of that, Ricardo Leverock from the hip-hop collective Damn lays a layer of hip-hop over the music that fits perfectly.</p>
+          <p>Balboa bridges the gap between afrofunk and hip-hop with a good dose of soul — a super-swinging, feel-good vibe made for dancing.</p>
+          <p>They've shared stages with Dutch jazz icons including Hans Dulfer and Benjamin Herman, and in August 2024 played the Zelenkovac Jazz Festival in Bosnia. Their debut EP is out now.</p>
+        </div>
+        <div class="lineup">
+          <h3>The band</h3>
+          <ul>
+            <li>Ricardo Leverock <span>Rap / MC</span></li>
+            <li>Kenneth a Joe Liauw <span>Drums</span></li>
+            <li>Oleksandr Novakov <span>Bass</span></li>
+            <li>Maurice Vermaes <span>Guitar</span></li>
+            <li>Christophe Millet <span>Percussion</span></li>
+            <li>Marco Krijger <span>Hammond organ</span></li>
+            <li>Henry Stribos <span>Trumpet</span></li>
+            <li>Marcel Bakker <span>Saxophone</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="about-photo">[ Band photo goes here — e.g. the live shot from your current About page ]</div>
+    </div>
+  </section>
+
+  <!-- ============ MEDIA ============ -->
+  <section class="page" id="media">
+    <div class="eyebrow">Live & studio</div>
+    <h1 class="page-title">Media</h1>
+    <div class="video-grid">
+
+      <!-- Real video, click-through to YouTube -->
+      <div class="video-card" onclick="window.open('https://www.youtube.com/watch?v=QCsfSIwbmFo','_blank')">
+        <div class="thumb"><div class="play"></div></div>
+        <div class="label"><b>The Isolation Sessions #85</b><small>Effenaar · Eindhoven</small></div>
+      </div>
+
+      <!--
+        ===== HOW TO ADD A VIDEO =====
+        The grid auto-sizes: every card stays equal no matter how many you add.
+
+        Option A (recommended) inline YouTube player. Paste the embed iframe:
+        <div class="video-card">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+                  title="Video title"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+        </div>
+
+        Option B click-through card. Copy the real card above, then change the
+        window.open() URL and the <b>title</b> / <small>subtitle</small>.
+      -->
+
+    </div>
+  </section>
+
+  <!-- ============ SHOWS ============ -->
+  <section class="page" id="shows">
+    <div class="eyebrow">Live</div>
+    <h1 class="page-title">Shows</h1>
+
+    <div class="shows-block">
+      <h3>Upcoming</h3>
+      <div class="booking">
+        <p>No shows currently announced. Want to book Balboa for a festival, club or private event?</p>
+        <button class="btn solid" onclick="go('contact')">Get in touch</button>
+      </div>
+    </div>
+
+    <div class="shows-block">
+      <h3>Past <span class="tag">verify dates</span></h3>
+      <div class="gig"><span class="date">Aug 2024</span><span class="venue">Zelenkovac Jazz Festival</span><span class="city">Zelenkovac, BA</span></div>
+      <div class="gig"><span class="date">—</span><span class="venue">Jazz on de Maas</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">—</span><span class="venue">Breda Jazz Festival</span><span class="city">Breda, NL</span></div>
+      <div class="gig"><span class="date">—</span><span class="venue">Bluenote Sessions · Frits Philips (×2)</span><span class="city">Eindhoven, NL</span></div>
+      <div class="gig"><span class="date">~2020</span><span class="venue">Isolation Sessions #85 · Effenaar</span><span class="city">Eindhoven, NL</span></div>
+      <div class="gig"><span class="date">2018</span><span class="venue">Fabriek Magnifique</span><span class="city">NL</span></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="page" id="contact">
+    <div class="eyebrow">Booking & enquiries</div>
+    <h1 class="page-title">Contact</h1>
+    <div class="contact-grid">
+      <form onsubmit="event.preventDefault();window.location.href='mailto:balboaafrojazz@hotmail.com?subject=Website%20enquiry&body='+encodeURIComponent(document.getElementById('msg').value+' — '+document.getElementById('nm').value)">
+        <div class="field"><label>Name</label><input id="nm" type="text" required></div>
+        <div class="field"><label>Email</label><input type="email" required></div>
+        <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
+        <button class="btn solid" type="submit">Send</button>
+      </form>
+      <div class="contact-side">
+        <p>For bookings, press, or just to say hi — drop us a line and we'll get back to you.</p>
+        <p>Email<br><a href="mailto:balboaafrojazz@hotmail.com">balboaafrojazz@hotmail.com</a></p>
+        <p>Follow<br>
+          <a href="https://www.facebook.com/Balboa.Afrojazz" target="_blank">Facebook</a> ·
+          <a href="https://www.instagram.com/balboa_eindhoven_afrojazz/" target="_blank">Instagram</a> ·
+          <a href="https://balboa-afrojazz.bandcamp.com/" target="_blank">Bandcamp</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Balboa — Afrojazz <span class="dot">●</span> Eindhoven, NL</footer>
+
+<script>
+  function go(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.menu button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    document.getElementById('menu').classList.remove('open');
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  document.getElementById('burger').onclick=()=>document.getElementById('menu').classList.toggle('open');
+</script>
+</body>
+</html>
