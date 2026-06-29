@@ -1,0 +1,21 @@
+{
+  // Worker name MUST match the existing Worker in your Cloudflare dashboard.
+  "name": "website",
+  "main": "src/index.js",
+  "compatibility_date": "2025-04-01",
+
+  // Serve the repo root as the static site. .assetsignore keeps the
+  // plumbing files (this config, src/, etc.) from being served publicly.
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  },
+
+  // Lets the Worker send mail, restricted to the one verified inbox.
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "balboaafrojazz@hotmail.com"
+    }
+  ]
+}
