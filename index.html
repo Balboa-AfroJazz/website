@@ -104,12 +104,9 @@
   /* ---------- HOME ---------- */
   #home.active{display:flex;flex-direction:column;flex:1 0 auto}
   .hero{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 0 40px}
-  .logo-plinth{background:var(--plinth);border:1px solid var(--line);border-radius:14px;
-    padding:clamp(16px,3vw,30px);position:relative;
-    box-shadow:0 40px 90px -40px rgba(0,0,0,.8);animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
-  .logo-plinth::before{content:"";position:absolute;inset:0;border-radius:14px;
-    background:radial-gradient(120% 120% at 70% 20%,rgba(232,93,44,.12),transparent 55%);pointer-events:none}
-  .logo-img{display:block;width:min(420px,76vw);height:auto;border-radius:8px;position:relative;z-index:1}
+  .logo-plinth{position:relative;animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+  .logo-img{display:block;width:min(460px,84vw);height:auto;border-radius:14px;position:relative;z-index:1;
+    box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
   .tagline{font-family:var(--mono);font-size:clamp(16px,2.4vw,22px);color:var(--text);margin-top:30px;letter-spacing:.02em;
     animation:rise .8s .15s both}
   .cta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap;justify-content:center;animation:rise .8s .3s both}
@@ -296,7 +293,7 @@
       </div>
       <p class="tagline">AfroFunk. Jazz. Dance!</p>
       <div class="cta">
-        <button class="btn solid" onclick="window.open('https://balboa-afrojazz.bandcamp.com/','_blank')">LISTEN</button>
+        <button class="btn solid" onclick="go('media')">MUSIC</button>
         <button class="btn ghost" onclick="go('shows')">SHOWS</button>
       </div>
       <div class="socials">
