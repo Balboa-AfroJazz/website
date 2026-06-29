@@ -64,7 +64,7 @@
     min-height:100vh;
     min-height:100dvh;
   }
-  main{flex:1 0 auto;display:flex;flex-direction:column}
+  main{flex:1 0 auto;display:flex;flex-direction:column;width:100%}
   /* subtle grain + warm glow for atmosphere */
   body::before{
     content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -253,7 +253,7 @@
     .gig{flex-wrap:wrap;gap:4px 14px}
     .gig .date{min-width:auto}
     .gig .city{text-align:left}
-    .booking-bar{flex-direction:column;align-items:flex-start;gap:14px}
+    .booking-bar{flex-direction:column;align-items:center;gap:14px;text-align:center}
   }
 </style>
 </head>
@@ -419,24 +419,24 @@
     <h1 class="page-title">Shows</h1>
 
     <div class="booking-bar">
-      <p>Available for festivals, clubs and private events.</p>
+      <p>Bring Balboa - Afrojazz to your stage</p>
       <button class="btn solid" onclick="go('contact')">Get in touch</button>
     </div>
 
     <div class="shows-block">
       <h3>Upcoming</h3>
+      <div class="gig"><span class="date">29 Jul</span><span class="venue"><a href="https://www.totaalfestival.nl/programma/woensdag/balboa" target="_blank" rel="noopener">TotaalFestival</a></span><span class="city">Bladel, NL</span></div>
       <div class="gig"><span class="date">TBA</span><span class="venue">STOOK! Festival</span><span class="city">Eindhoven, NL</span></div>
-      <div class="gig"><span class="date">29 Jul · 19:50</span><span class="venue"><a href="https://www.totaalfestival.nl/programma/woensdag/balboa" target="_blank" rel="noopener">TotaalFestival</a></span><span class="city">Bladel, NL</span></div>
     </div>
 
     <div class="shows-block">
       <h3>Past</h3>
-      <div class="gig"><span class="date">Jun 2026</span><span class="venue">Fête de la Musique</span><span class="city">NL</span></div>
-      <div class="gig"><span class="date">Apr 2026</span><span class="venue">VONK! Festival</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">Jun 2026</span><span class="venue">Fête de la Musique</span><span class="city">Eindhoven, NL</span></div>
+      <div class="gig"><span class="date">Apr 2026</span><span class="venue">VONK! Festival</span><span class="city">Eindhoven, NL</span></div>
       <div class="gig"><span class="date">2024</span><span class="venue">Zelenkovac Jazz Festival</span><span class="city">Zelenkovac, BA</span></div>
-      <div class="gig"><span class="date">2022</span><span class="venue">Jazz aan de Maas</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">2022</span><span class="venue">Jazz aan de Maas</span><span class="city">Limburg, NL</span></div>
       <div class="gig"><span class="date">2020</span><span class="venue">Isolation Sessions #85 · Effenaar</span><span class="city">Eindhoven, NL</span></div>
-      <div class="gig"><span class="date">2018</span><span class="venue">Fabriek Magnifique</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">2018</span><span class="venue">Fabriek Magnifique</span><span class="city">Veghel, NL</span></div>
     </div>
   </section>
 
