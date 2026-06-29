@@ -1,23 +1,37 @@
 <!--
-  BALBOA - AFROJAZZ — working site prototype (v0.1)
-  Single self-contained file. No build step, no dependencies.
-  Deployable as-is to Cloudflare Pages / GitHub Pages (free).
-
-  CONTENT NOTES (swap these for the real thing later):
-   - Logo: the hero uses a CSS wordmark as a placeholder.
-     Drop your real mask logo image into <div class="logo-plinth"> (replace the .wordmark block with <img>).
-   - Media: cards are styled placeholders. Replace each .video-card's onclick / inner with a real
-     <iframe> YouTube embed (or keep as click-through links to the videos).
-   - Shows: dates marked "—" need confirming from your Facebook past-events list.
-   - Contact form: static sites can't send mail alone. Wire the form to a free service
-     like Formspree (action="https://formspree.io/f/XXXX") or use the mailto fallback already on the button.
+  BALBOA - AFROJAZZ - band site (single self-contained file, no build step).
+  Deployed via Cloudflare Workers, auto-deploys on every push to GitHub main.
+  Images live in the repo root, all lowercase: balboa.jpg, balboa-band.jpg, balboa-dropdown.jpg
+  Note: judge image-dependent layout on the live URL, not the in-app file preview
+  (the preview sandbox can't load sibling image files).
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Balboa — Afrojazz</title>
+<meta name="theme-color" content="#0F0F16">
+<title>Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven</title>
+<meta name="description" content="Balboa is an 8-piece Afrofunk and jazz live band from Eindhoven, Netherlands. Originals inspired by Ebo Taylor, Fela Kuti and Hugh Masekela, with a hip-hop edge. AfroFunk. Jazz. Dance!">
+
+<!-- Open Graph + Twitter for link previews on FB / IG / WhatsApp. -->
+<!-- Absolute URLs point at the live custom domain. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Balboa - Afrojazz">
+<meta property="og:title" content="Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven">
+<meta property="og:description" content="8-piece Afrofunk and jazz live band from Eindhoven. AfroFunk. Jazz. Dance!">
+<meta property="og:image" content="https://balboa-afrojazz.com/balboa.jpg">
+<meta property="og:url" content="https://balboa-afrojazz.com/">
+<link rel="canonical" href="https://balboa-afrojazz.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven">
+<meta name="twitter:description" content="8-piece Afrofunk and jazz live band from Eindhoven. AfroFunk. Jazz. Dance!">
+<meta name="twitter:image" content="https://balboa-afrojazz.com/balboa.jpg">
+
+<!-- Favicon: inline SVG (orange B on charcoal), no extra file needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2326201C'/><text x='16' y='23' font-family='Arial,sans-serif' font-size='21' font-weight='800' fill='%23E85D2C' text-anchor='middle'>B</text></svg>">
+<link rel="apple-touch-icon" href="balboa.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -49,7 +63,7 @@
     min-height:100vh;
     min-height:100dvh;
   }
-  main{flex:1 0 auto}
+  main{flex:1 0 auto;display:flex;flex-direction:column}
   /* subtle grain + warm glow for atmosphere */
   body::before{
     content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -66,8 +80,7 @@
     background:linear-gradient(var(--bg),rgba(15,15,22,.6) 70%,transparent);}
   nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
   .brand{display:flex;align-items:center;gap:12px;cursor:pointer;background:none;border:0;color:var(--text)}
-  .brand .mark{width:34px;height:34px;border:1.5px solid var(--orange);border-radius:6px;
-    display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--orange);font-size:15px;background:var(--plinth)}
+  .brand .mark{width:34px;height:34px;border-radius:6px;object-fit:cover;object-position:center;display:block}
   .brand .name{font-family:var(--mono);font-size:15px;letter-spacing:.02em}
   .menu{display:flex;gap:30px;align-items:center}
   .menu button{background:none;border:0;color:var(--muted);font-family:var(--mono);font-size:14px;
@@ -88,7 +101,8 @@
   .eyebrow{font-family:var(--mono);font-size:13px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase}
 
   /* ---------- HOME ---------- */
-  .hero{min-height:calc(100vh - 80px);min-height:calc(100dvh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 0 40px}
+  #home.active{display:flex;flex-direction:column;flex:1 0 auto}
+  .hero{flex:1 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 0 40px}
   .logo-plinth{background:var(--plinth);border:1px solid var(--line);border-radius:14px;
     padding:clamp(16px,3vw,30px);position:relative;
     box-shadow:0 40px 90px -40px rgba(0,0,0,.8);animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
@@ -167,19 +181,42 @@
   .contact-side p{color:#d7d4ce;margin-bottom:18px}
   .contact-side a{color:var(--orange);text-decoration:none;font-family:var(--mono)}
   .contact-side a:hover{text-decoration:underline}
+  .form-status{font-family:var(--mono);font-size:13px;margin-top:14px;min-height:18px;color:var(--muted)}
+  .form-status.ok{color:var(--orange-soft)}
+  .form-status.err{color:#ff8a6b}
 
   footer{text-align:center;padding:60px 0 40px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
   footer .dot{color:var(--orange)}
 
+  /* ---------- MOBILE NAV OVERLAY ---------- */
+  .mobile-nav{display:none}
+  body.menu-open{overflow:hidden}
+
   /* ---------- RESPONSIVE ---------- */
   @media(max-width:780px){
-    .menu{position:fixed;inset:0 0 auto 0;top:78px;flex-direction:column;gap:0;
-      background:var(--bg-2);border-bottom:1px solid var(--line);padding:0;
-      max-height:0;overflow:hidden;transition:max-height .3s}
-    .menu.open{max-height:320px}
-    .menu button{padding:18px 28px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
-    .menu button::after{display:none}
+    .menu{display:none}
     .burger{display:flex}
+
+    /* full-screen overlay menu, artwork background + dark scrim for legibility */
+    .mobile-nav{
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+      gap:2px;position:fixed;inset:0;z-index:200;padding:0 12vw;
+      background-image:linear-gradient(rgba(15,15,22,.86),rgba(15,15,22,.92)),url("balboa-dropdown.jpg");
+      background-size:cover;background-position:center;
+      opacity:0;visibility:hidden;transition:opacity .35s ease}
+    .mobile-nav.open{opacity:1;visibility:visible}
+    .mobile-nav button:not(.mobile-close){
+      background:none;border:0;cursor:pointer;text-align:left;
+      font-family:var(--display);font-weight:800;font-size:clamp(34px,11vw,52px);
+      letter-spacing:-.02em;line-height:1.25;color:var(--orange);padding:8px 0;
+      text-shadow:0 2px 24px rgba(0,0,0,.55);transition:transform .15s,color .2s}
+    .mobile-nav button:not(.mobile-close):active{transform:translateX(8px)}
+    .mobile-nav button.active{color:var(--cream)}
+    .mobile-nav .mobile-close{
+      position:absolute;top:18px;right:20px;background:none;border:0;cursor:pointer;
+      font-family:var(--display);font-size:40px;line-height:1;font-weight:400;
+      color:var(--text);padding:6px 12px;text-shadow:0 2px 24px rgba(0,0,0,.55)}
+
     .about-grid,.contact-grid{grid-template-columns:1fr;gap:30px}
     .video-grid{grid-template-columns:1fr}
     .lineup ul{grid-template-columns:1fr}
@@ -195,8 +232,8 @@
   <div class="wrap">
     <nav>
       <button class="brand" onclick="go('home')">
-        <span class="mark">B</span>
-        <span class="name">Balboa — Afrojazz</span>
+        <img class="mark" src="balboa.jpg" alt="Balboa Afrojazz">
+        <span class="name">Balboa - Afrojazz</span>
       </button>
       <button class="burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -210,6 +247,17 @@
     </nav>
   </div>
 </header>
+
+<!-- Full-screen mobile menu overlay. Kept OUTSIDE <header> on purpose: the header's
+     backdrop-filter would otherwise trap this fixed element inside the header box. -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile menu">
+  <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <button data-page="home" onclick="go('home')">Home</button>
+  <button data-page="about" onclick="go('about')">About</button>
+  <button data-page="media" onclick="go('media')">Media</button>
+  <button data-page="shows" onclick="go('shows')">Shows</button>
+  <button data-page="contact" onclick="go('contact')">Contact</button>
+</nav>
 
 <main class="wrap">
 
@@ -234,27 +282,26 @@
 
   <!-- ============ ABOUT ============ -->
   <section class="page" id="about">
-    <div class="eyebrow">Eindhoven, NL — 8-piece live band</div>
     <h1 class="page-title">About</h1>
     <div class="about-grid">
       <div>
         <div class="bio">
           <p class="lead">Balboa is an eight-piece live band from Eindhoven, performing originals influenced by Afrofunk from the 70s.</p>
-          <p>Names like Ebo Taylor, Hugh Masakela and Fela Kuti are the sources of inspiration. On top of that, Ricardo Leverock from the hip-hop collective Damn lays a layer of hip-hop over the music that fits perfectly.</p>
+          <p>Names like Ebo Taylor, Hugh Masekela and Fela Kuti are the sources of inspiration. On top of that, Ricardo Leverock from the hip-hop collective Damn lays a layer of hip-hop over the music that fits perfectly.</p>
           <p>Balboa bridges the gap between afrofunk and hip-hop with a good dose of soul — a super-swinging, feel-good vibe made for dancing.</p>
           <p>They've shared stages with Dutch jazz icons including Hans Dulfer and Benjamin Herman, and in August 2024 played the Zelenkovac Jazz Festival in Bosnia. Their debut EP is out now.</p>
         </div>
         <div class="lineup">
           <h3>The band</h3>
           <ul>
-            <li>Ricardo Leverock <span>Rap / MC</span></li>
+            <li>Rob Vermaelen <span>Rap / MC</span></li>
             <li>Kenneth a Joe Liauw <span>Drums</span></li>
-            <li>Oleksandr Novakov <span>Bass</span></li>
-            <li>Maurice Vermaes <span>Guitar</span></li>
+            <li>Tugan Turgut <span>Bass</span></li>
+            <li>Joost <span>Guitar</span></li>
             <li>Christophe Millet <span>Percussion</span></li>
             <li>Marco Krijger <span>Hammond organ</span></li>
-            <li>Henry Stribos <span>Trumpet</span></li>
-            <li>Marcel Bakker <span>Saxophone</span></li>
+            <li>Vacancy <span>Trumpet</span></li>
+            <li>Onno Buijs <span>Saxophone</span></li>
           </ul>
         </div>
       </div>
@@ -264,7 +311,6 @@
 
   <!-- ============ MEDIA ============ -->
   <section class="page" id="media">
-    <div class="eyebrow">Live & studio</div>
     <h1 class="page-title">Media</h1>
     <div class="video-grid">
 
@@ -295,7 +341,6 @@
 
   <!-- ============ SHOWS ============ -->
   <section class="page" id="shows">
-    <div class="eyebrow">Live</div>
     <h1 class="page-title">Shows</h1>
 
     <div class="shows-block">
@@ -307,7 +352,7 @@
     </div>
 
     <div class="shows-block">
-      <h3>Past <span class="tag">verify dates</span></h3>
+      <h3>Past</h3>
       <div class="gig"><span class="date">Aug 2024</span><span class="venue">Zelenkovac Jazz Festival</span><span class="city">Zelenkovac, BA</span></div>
       <div class="gig"><span class="date">—</span><span class="venue">Jazz on de Maas</span><span class="city">NL</span></div>
       <div class="gig"><span class="date">—</span><span class="venue">Breda Jazz Festival</span><span class="city">Breda, NL</span></div>
@@ -319,18 +364,18 @@
 
   <!-- ============ CONTACT ============ -->
   <section class="page" id="contact">
-    <div class="eyebrow">Booking & enquiries</div>
     <h1 class="page-title">Contact</h1>
     <div class="contact-grid">
-      <form onsubmit="event.preventDefault();window.location.href='mailto:balboaafrojazz@hotmail.com?subject=Website%20enquiry&body='+encodeURIComponent(document.getElementById('msg').value+' — '+document.getElementById('nm').value)">
+      <form id="contactForm" onsubmit="sendContact(event)">
         <div class="field"><label>Name</label><input id="nm" type="text" required></div>
-        <div class="field"><label>Email</label><input type="email" required></div>
+        <div class="field"><label>Email</label><input id="em" type="email" required></div>
         <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
-        <button class="btn solid" type="submit">Send</button>
+        <button class="btn solid" type="submit" id="contactSend">Send</button>
+        <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
       <div class="contact-side">
         <p>For bookings, press, or just to say hi — drop us a line and we'll get back to you.</p>
-        <p>Email<br><a href="mailto:balboaafrojazz@hotmail.com">balboaafrojazz@hotmail.com</a></p>
+        <p>Email<br><a href="mailto:hello@balboa-afrojazz.com">hello@balboa-afrojazz.com</a></p>
         <p>Follow<br>
           <a href="https://www.facebook.com/Balboa.Afrojazz" target="_blank">Facebook</a> ·
           <a href="https://www.instagram.com/balboa_eindhoven_afrojazz/" target="_blank">Instagram</a> ·
@@ -342,17 +387,67 @@
 
 </main>
 
-<footer>Balboa — Afrojazz <span class="dot">●</span> Eindhoven, NL</footer>
+<footer>Balboa - Afrojazz <span class="dot">●</span> Eindhoven, NL</footer>
 
 <script>
-  function go(id){
+  const mobileNav=document.getElementById('mobileNav');
+  function closeMobileNav(){mobileNav.classList.remove('open');document.body.classList.remove('menu-open');}
+  function showPage(id){
+    if(!id||!document.getElementById(id)) id='home';
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    document.querySelectorAll('.menu button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
-    document.getElementById('menu').classList.remove('open');
+    document.querySelectorAll('.menu button,.mobile-nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    closeMobileNav();
     window.scrollTo({top:0,behavior:'instant'});
   }
-  document.getElementById('burger').onclick=()=>document.getElementById('menu').classList.toggle('open');
+  function currentId(){return location.hash.slice(1)||'home';}
+  function go(id){
+    const target=id==='home'?'':id;
+    if(target===''){
+      if(location.hash){history.pushState('',document.title,location.pathname+location.search);}
+      showPage('home');
+    }else if(location.hash.slice(1)===target){
+      showPage(id);
+    }else{
+      location.hash=target;
+    }
+  }
+  window.addEventListener('hashchange',()=>showPage(currentId()));
+  window.addEventListener('popstate',()=>showPage(currentId()));
+  document.getElementById('burger').onclick=()=>{mobileNav.classList.add('open');document.body.classList.add('menu-open');};
+  document.getElementById('mobileClose').onclick=closeMobileNav;
+
+  showPage(currentId()); // set the initial page from the URL hash (supports deep links)
+
+  async function sendContact(e){
+    e.preventDefault();
+    const btn=document.getElementById('contactSend');
+    const status=document.getElementById('contactStatus');
+    const payload={
+      name:document.getElementById('nm').value,
+      email:document.getElementById('em').value,
+      message:document.getElementById('msg').value
+    };
+    btn.disabled=true;
+    status.className='form-status';
+    status.textContent='Sending...';
+    try{
+      const r=await fetch('/api/contact',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+      if(!r.ok) throw new Error('status '+r.status);
+      status.className='form-status ok';
+      status.textContent='Thanks! Your message is on its way.';
+      document.getElementById('contactForm').reset();
+    }catch(err){
+      status.className='form-status err';
+      status.textContent='Something went wrong. You can email us directly at hello@balboa-afrojazz.com';
+    }finally{
+      btn.disabled=false;
+    }
+  }
 </script>
 </body>
 </html>
