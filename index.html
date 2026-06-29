@@ -51,7 +51,7 @@
     --display:'Bricolage Grotesque',system-ui,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scrollbar-gutter:stable}
   body{
     background:var(--bg);
     color:var(--text);
@@ -138,6 +138,8 @@
   .lineup li{font-family:var(--mono);font-size:14px;color:#cfccc6;display:flex;justify-content:space-between;
     gap:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
   .lineup li span{color:var(--muted);font-size:12px;text-align:right}
+  .lineup a.seat-open{color:var(--orange);text-decoration:none;transition:color .2s}
+  .lineup a.seat-open:hover{color:var(--orange-soft);text-decoration:underline}
 
   /* ---------- MEDIA ---------- */
   .media-block{margin-top:40px}
@@ -182,9 +184,13 @@
   .gig .date{font-family:var(--mono);font-size:15px;color:var(--cream);min-width:120px}
   .gig .venue{flex:1;font-size:17px;color:var(--text)}
   .gig .city{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right}
-  .booking{margin-top:18px;padding:26px;border:1px dashed var(--line);border-radius:12px;
-    background:rgba(232,93,44,.05)}
-  .booking p{color:#d7d4ce;margin-bottom:14px}
+  .booking-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;
+    margin-top:34px;padding:16px 24px;border:1px solid var(--line);border-radius:12px;
+    background:rgba(232,93,44,.06)}
+  .booking-bar p{color:#d7d4ce;font-size:15px}
+  .booking-bar .btn{padding:11px 28px;font-size:14px;white-space:nowrap}
+  .gig .venue a{color:var(--orange);text-decoration:none;transition:color .2s}
+  .gig .venue a:hover{color:var(--orange-soft);text-decoration:underline}
   .tag{font-family:var(--mono);font-size:11px;color:var(--orange);border:1px solid var(--orange);
     border-radius:20px;padding:2px 9px;margin-left:8px;vertical-align:middle}
 
@@ -247,6 +253,7 @@
     .gig{flex-wrap:wrap;gap:4px 14px}
     .gig .date{min-width:auto}
     .gig .city{text-align:left}
+    .booking-bar{flex-direction:column;align-items:flex-start;gap:14px}
   }
 </style>
 </head>
@@ -310,22 +317,21 @@
     <div class="about-grid">
       <div>
         <div class="bio">
-          <p class="lead">Balboa is an eight-piece live band from Eindhoven, performing originals influenced by Afrofunk from the 70s.</p>
-          <p>Names like Ebo Taylor, Hugh Masekela and Fela Kuti are the sources of inspiration. On top of that, Ricardo Leverock from the hip-hop collective Damn lays a layer of hip-hop over the music that fits perfectly.</p>
-          <p>Balboa bridges the gap between afrofunk and hip-hop with a good dose of soul — a super-swinging, feel-good vibe made for dancing.</p>
-          <p>They've shared stages with Dutch jazz icons including Hans Dulfer and Benjamin Herman, and in August 2024 played the Zelenkovac Jazz Festival in Bosnia. Their debut EP is out now.</p>
+          <p class="lead">Balboa is an eight-piece live band from Eindhoven, performing originals influenced by 70s Afrofunk, bridging afrofunk and jazz with a good dose of hip-hop, for a super-swinging, feel-good vibe made for dancing.</p>
+          <p>They've shared stages with Dutch jazz icons including Hans Dulfer and Benjamin Herman, and in August 2024 played the Zelenkovac Jazz Festival in Bosnia. Their debut EP arrived in May 2024.</p>
+          <p>With fresh faces in the band since 2026, Balboa is in its third chapter: back on stage and writing new music.</p>
         </div>
         <div class="lineup">
           <h3>The band</h3>
           <ul>
             <li>Rob Vermaelen <span>Rap / MC</span></li>
-            <li>Kenneth a Joe Liauw <span>Drums</span></li>
-            <li>Tugan Turgut <span>Bass</span></li>
-            <li>Joost <span>Guitar</span></li>
-            <li>Christophe Millet <span>Percussion</span></li>
             <li>Marco Krijger <span>Hammond organ</span></li>
-            <li>Vacancy <span>Trumpet</span></li>
+            <li>Kenneth a Joe Liauw <span>Drums</span></li>
+            <li>Joost van Loon <span>Guitar</span></li>
+            <li>Tugan Turgut <span>Bass</span></li>
             <li>Onno Buijs <span>Saxophone</span></li>
+            <li>Christophe Millet <span>Percussion</span></li>
+            <li><a href="#contact" class="seat-open">Seat open - Get in touch!</a> <span>Trumpet</span></li>
           </ul>
         </div>
       </div>
@@ -412,21 +418,24 @@
   <section class="page" id="shows">
     <h1 class="page-title">Shows</h1>
 
+    <div class="booking-bar">
+      <p>Available for festivals, clubs and private events.</p>
+      <button class="btn solid" onclick="go('contact')">Get in touch</button>
+    </div>
+
     <div class="shows-block">
       <h3>Upcoming</h3>
-      <div class="booking">
-        <p>No shows currently announced. Want to book Balboa for a festival, club or private event?</p>
-        <button class="btn solid" onclick="go('contact')">Get in touch</button>
-      </div>
+      <div class="gig"><span class="date">TBA</span><span class="venue">STOOK! Festival</span><span class="city">Eindhoven, NL</span></div>
+      <div class="gig"><span class="date">29 Jul · 19:50</span><span class="venue"><a href="https://www.totaalfestival.nl/programma/woensdag/balboa" target="_blank" rel="noopener">TotaalFestival</a></span><span class="city">Bladel, NL</span></div>
     </div>
 
     <div class="shows-block">
       <h3>Past</h3>
-      <div class="gig"><span class="date">Aug 2024</span><span class="venue">Zelenkovac Jazz Festival</span><span class="city">Zelenkovac, BA</span></div>
-      <div class="gig"><span class="date">—</span><span class="venue">Jazz on de Maas</span><span class="city">NL</span></div>
-      <div class="gig"><span class="date">—</span><span class="venue">Breda Jazz Festival</span><span class="city">Breda, NL</span></div>
-      <div class="gig"><span class="date">—</span><span class="venue">Bluenote Sessions · Frits Philips (×2)</span><span class="city">Eindhoven, NL</span></div>
-      <div class="gig"><span class="date">~2020</span><span class="venue">Isolation Sessions #85 · Effenaar</span><span class="city">Eindhoven, NL</span></div>
+      <div class="gig"><span class="date">Jun 2026</span><span class="venue">Fête de la Musique</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">Apr 2026</span><span class="venue">VONK! Festival</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">2024</span><span class="venue">Zelenkovac Jazz Festival</span><span class="city">Zelenkovac, BA</span></div>
+      <div class="gig"><span class="date">2022</span><span class="venue">Jazz aan de Maas</span><span class="city">NL</span></div>
+      <div class="gig"><span class="date">2020</span><span class="venue">Isolation Sessions #85 · Effenaar</span><span class="city">Eindhoven, NL</span></div>
       <div class="gig"><span class="date">2018</span><span class="venue">Fabriek Magnifique</span><span class="city">NL</span></div>
     </div>
   </section>
@@ -443,7 +452,7 @@
         <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
       <div class="contact-side">
-        <p>For bookings, press, or just to say hi — drop us a line and we'll get back to you.</p>
+        <p>For bookings, press, or just to say hi, drop us a line and we'll get back to you.</p>
         <p>Email<br><a href="mailto:hello@balboa-afrojazz.com">hello@balboa-afrojazz.com</a></p>
         <p>Follow<br>
           <a href="https://www.facebook.com/Balboa.Afrojazz" target="_blank">Facebook</a> ·
