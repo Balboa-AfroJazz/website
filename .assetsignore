@@ -1,0 +1,7 @@
+wrangler.jsonc
+.assetsignore
+src
+*.md
+package.json
+package-lock.json
+.gitignore
