@@ -117,8 +117,12 @@
   .btn.ghost:hover{background:rgba(232,93,44,.12)}
   a.btn{display:inline-block;text-decoration:none}
   .socials{display:flex;gap:22px;margin-top:46px;animation:rise .8s .45s both}
-  .socials a{color:var(--muted);transition:color .2s,transform .2s}
-  .socials a:hover{color:var(--orange);transform:translateY(-2px)}
+  /* Social icons in their own brand colors. FB + Bandcamp use currentColor;
+     Instagram is a gradient (defined inline in its SVG, below). */
+  .socials a{transition:transform .2s,filter .2s}
+  .socials a:hover{transform:translateY(-2px);filter:brightness(1.15)}
+  .socials .soc-fb{color:#1877F2}   /* Facebook brand blue  */
+  .socials .soc-bc{color:#629aa9}   /* Bandcamp brand teal  */
   .socials svg{width:24px;height:24px;display:block}
   @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
@@ -326,9 +330,9 @@
         <button class="btn ghost" onclick="go('shows')">SHOWS</button>
       </div>
       <div class="socials">
-        <a href="https://www.facebook.com/Balboa.Afrojazz" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
-        <a href="https://www.instagram.com/balboa_eindhoven_afrojazz/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-        <a href="https://balboa-afrojazz.bandcamp.com/" target="_blank" aria-label="Bandcamp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/></svg></a>
+        <a class="soc-fb" href="https://www.facebook.com/Balboa.Afrojazz" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+        <a href="https://www.instagram.com/balboa_eindhoven_afrojazz/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="url(#ig-grad)" stroke-width="2"><defs><linearGradient id="ig-grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#FCAF45"/><stop offset=".25" stop-color="#F56040"/><stop offset=".5" stop-color="#E1306C"/><stop offset=".75" stop-color="#833AB4"/><stop offset="1" stop-color="#405DE6"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="url(#ig-grad)" stroke="none"/></svg></a>
+        <a class="soc-bc" href="https://balboa-afrojazz.bandcamp.com/" target="_blank" aria-label="Bandcamp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 18.75l7.437-13.5H24l-7.437 13.5H0z"/></svg></a>
       </div>
     </div>
   </section>
