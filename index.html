@@ -107,9 +107,7 @@
   .logo-plinth{position:relative;animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
   .logo-img{display:block;width:min(460px,84vw);height:auto;border-radius:14px;position:relative;z-index:1;
     box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
-  .tagline{font-family:var(--mono);font-size:clamp(16px,2.4vw,22px);color:var(--text);margin-top:30px;letter-spacing:.02em;
-    animation:rise .8s .15s both}
-  .cta{display:flex;gap:16px;margin-top:30px;flex-wrap:wrap;justify-content:center;animation:rise .8s .3s both}
+  .cta{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;justify-content:center;animation:rise .8s .2s both}
   .btn{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.05em;cursor:pointer;
     padding:15px 40px;border-radius:40px;border:1.5px solid var(--orange);transition:transform .2s,background .2s,color .2s}
   .btn.solid{background:var(--orange);color:#1a0f09;border-color:var(--orange)}
@@ -196,10 +194,10 @@
 
   /* ---------- CONTACT ---------- */
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;
-    grid-template-areas:"form intro" "form side";
+    grid-template-areas:"form intro" "form side";grid-template-rows:auto 1fr;
     column-gap:46px;row-gap:18px;margin-top:34px;align-items:start}
   #contactForm{grid-area:form}
-  .contact-intro{grid-area:intro;color:#d7d4ce}
+  .contact-intro{grid-area:intro;color:#d7d4ce;margin-top:28px}
   .contact-side{grid-area:side}
   .field{margin-bottom:18px}
   .field label{display:block;font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
@@ -213,6 +211,8 @@
   .form-status{font-family:var(--mono);font-size:13px;margin-top:14px;min-height:18px;color:var(--muted)}
   .form-status.ok{color:var(--orange-soft)}
   .form-status.err{color:#ff8a6b}
+  /* Honeypot: off-screen, invisible to humans, bots tend to fill it. */
+  .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
   footer{text-align:center;padding:60px 0 40px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
   footer .dot{color:var(--orange)}
@@ -232,29 +232,39 @@
     .menu{display:none}
     .burger{display:flex}
 
-    /* full-screen overlay menu, artwork background + dark scrim for legibility */
+    /* full-screen overlay: menu on a black band up top, artwork full-brightness below */
     .mobile-nav{
-      display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-      gap:2px;position:fixed;inset:0;z-index:200;padding:0 12vw;
-      background-image:linear-gradient(rgba(15,15,22,.58),rgba(15,15,22,.72)),url("balboa-dropdown.jpg");
-      background-size:cover;background-position:center;
+      display:flex;flex-direction:column;
+      position:fixed;inset:0;z-index:200;
+      background:var(--bg);
       opacity:0;visibility:hidden;transition:opacity .35s ease}
     .mobile-nav.open{opacity:1;visibility:visible}
-    .mobile-nav button:not(.mobile-close){
-      background:none;border:0;cursor:pointer;text-align:left;
-      font-family:var(--display);font-weight:800;font-size:clamp(34px,11vw,52px);
-      letter-spacing:-.02em;line-height:1.25;color:var(--orange);padding:8px 0;
-      text-shadow:0 2px 24px rgba(0,0,0,.55);transition:transform .15s,color .2s}
-    .mobile-nav button:not(.mobile-close):active{transform:translateX(8px)}
-    .mobile-nav button.active{color:var(--cream)}
+
+    .mn-top{position:relative;padding:64px 6vw 26px}
+    .mn-links{display:grid;grid-template-columns:auto auto;
+      column-gap:26px;row-gap:8px;justify-content:center;justify-items:center}
+    .mobile-nav .mn-links button{
+      background:none;border:0;cursor:pointer;text-align:center;
+      font-family:var(--display);font-weight:800;font-size:clamp(28px,8vw,44px);
+      letter-spacing:-.02em;line-height:1.15;color:var(--orange);padding:6px 6px;
+      transition:transform .15s,color .2s}
+    .mobile-nav .mn-links button:active{transform:translateY(2px)}
+    .mobile-nav .mn-links button.active{color:var(--cream)}
+    .mn-contact{grid-column:1 / -1}
+
+    .mn-art{flex:1;min-height:0;
+      background-image:url("balboa-dropdown.jpg");
+      background-size:cover;background-position:center;background-repeat:no-repeat}
+
     .mobile-nav .mobile-close{
-      position:absolute;top:18px;right:20px;background:none;border:0;cursor:pointer;
+      position:absolute;top:14px;right:18px;background:none;border:0;cursor:pointer;
       font-family:var(--display);font-size:40px;line-height:1;font-weight:400;
-      color:var(--text);padding:6px 12px;text-shadow:0 2px 24px rgba(0,0,0,.55)}
+      color:var(--text);padding:6px 12px;z-index:3}
 
     .about-grid{grid-template-columns:1fr;gap:30px}
-    .contact-grid{grid-template-columns:1fr;
+    .contact-grid{grid-template-columns:1fr;grid-template-rows:none;
       grid-template-areas:"intro" "form" "side";gap:26px}
+    .contact-intro{margin-top:0}
     .video-grid{grid-template-columns:1fr}
     .lineup ul{grid-template-columns:1fr}
     .gig{flex-wrap:wrap;gap:4px 14px}
@@ -290,11 +300,16 @@
      backdrop-filter would otherwise trap this fixed element inside the header box. -->
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile menu">
   <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
-  <button data-page="home" onclick="go('home')">Home</button>
-  <button data-page="about" onclick="go('about')">About</button>
-  <button data-page="media" onclick="go('media')">Media</button>
-  <button data-page="shows" onclick="go('shows')">Shows</button>
-  <button data-page="contact" onclick="go('contact')">Contact</button>
+  <div class="mn-top">
+    <div class="mn-links">
+      <button data-page="home" onclick="go('home')">Home</button>
+      <button data-page="about" onclick="go('about')">About</button>
+      <button data-page="media" onclick="go('media')">Media</button>
+      <button data-page="shows" onclick="go('shows')">Shows</button>
+      <button data-page="contact" onclick="go('contact')" class="mn-contact">Contact</button>
+    </div>
+  </div>
+  <div class="mn-art" aria-hidden="true"></div>
 </nav>
 
 <main class="wrap">
@@ -305,7 +320,6 @@
       <div class="logo-plinth">
         <img class="logo-img" src="balboa.jpg" alt="Balboa Afrojazz logo">
       </div>
-      <p class="tagline">AfroFunk. Jazz. Dance!</p>
       <div class="cta">
         <button class="btn solid" onclick="go('media')">MUSIC</button>
         <button class="btn ghost" onclick="go('shows')">SHOWS</button>
@@ -456,6 +470,8 @@
         <div class="field"><label>Name</label><input id="nm" type="text" required></div>
         <div class="field"><label>Email</label><input id="em" type="email" required></div>
         <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
+        <!-- Honeypot: hidden from real users. Leave empty. Bots that fill it get silently dropped. -->
+        <div class="hp-field" aria-hidden="true"><label>Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <button class="btn solid" type="submit" id="contactSend">Send</button>
         <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
@@ -511,7 +527,8 @@
     const payload={
       name:document.getElementById('nm').value,
       email:document.getElementById('em').value,
-      message:document.getElementById('msg').value
+      message:document.getElementById('msg').value,
+      website:document.getElementById('website').value
     };
     btn.disabled=true;
     status.className='form-status';
