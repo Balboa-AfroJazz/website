@@ -241,7 +241,7 @@
       opacity:0;visibility:hidden;transition:opacity .35s ease}
     .mobile-nav.open{opacity:1;visibility:visible}
 
-    .mn-top{position:relative;padding:64px 6vw 26px}
+    .mn-top{position:relative;z-index:2;padding:64px 6vw 26px}
     .mn-links{display:grid;grid-template-columns:auto auto;
       column-gap:26px;row-gap:8px;justify-content:center;justify-items:center}
     .mobile-nav .mn-links button{
@@ -253,9 +253,9 @@
     .mobile-nav .mn-links button.active{color:var(--cream)}
     .mn-contact{grid-column:1 / -1}
 
-    .mn-art{flex:1;min-height:0;
-      background-image:url("balboa-dropdown.jpg");
-      background-size:cover;background-position:center;background-repeat:no-repeat}
+    .mn-art{position:absolute;left:0;right:0;bottom:0;z-index:1;
+      width:100%;height:58vh;height:58dvh;
+      object-fit:cover;object-position:center;display:block}
 
     .mobile-nav .mobile-close{
       position:absolute;top:14px;right:18px;background:none;border:0;cursor:pointer;
@@ -310,7 +310,7 @@
       <button data-page="contact" onclick="go('contact')" class="mn-contact">Contact</button>
     </div>
   </div>
-  <div class="mn-art" aria-hidden="true"></div>
+  <img class="mn-art" src="balboa-dropdown.jpg" alt="" aria-hidden="true">
 </nav>
 
 <main class="wrap">
