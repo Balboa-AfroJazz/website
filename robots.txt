@@ -1,0 +1,6 @@
+# Balboa - Afrojazz
+# Allow all search engines to crawl everything, and point them at the sitemap.
+User-agent: *
+Allow: /
+
+Sitemap: https://balboa-afrojazz.com/sitemap.xml

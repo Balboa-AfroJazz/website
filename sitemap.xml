@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Single-page site: the homepage is the only real URL. The #about / #media
+     hash routes are not separate URLs to Google, so they don't belong here.
+     Update <lastmod> when the site content meaningfully changes. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://balboa-afrojazz.com/</loc>
+    <lastmod>2026-06-30</lastmod>
+  </url>
+</urlset>
