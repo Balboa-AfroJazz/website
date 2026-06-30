@@ -36,6 +36,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Cloudflare Turnstile (contact-form bot check). Explicit render so the widget
+     mounts only when the (SPA-hidden) contact page is shown. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script>
 <style>
   :root{
     --bg:#0F0F16;
@@ -215,8 +219,8 @@
   .form-status{font-family:var(--mono);font-size:13px;margin-top:14px;min-height:18px;color:var(--muted)}
   .form-status.ok{color:var(--orange-soft)}
   .form-status.err{color:#ff8a6b}
-  /* Honeypot: off-screen, invisible to humans, bots tend to fill it. */
-  .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  /* Turnstile widget sits between the message field and the Send button. */
+  #cf-turnstile{margin:4px 0 18px}
 
   footer{text-align:center;padding:60px 0 40px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
   footer .dot{color:var(--orange)}
@@ -475,8 +479,8 @@
         <div class="field"><label>Name</label><input id="nm" type="text" required></div>
         <div class="field"><label>Email</label><input id="em" type="email" required></div>
         <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
-        <!-- Honeypot: hidden from real users. Leave empty. Bots that fill it get silently dropped. -->
-        <div class="hp-field" aria-hidden="true"><label>Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <!-- Turnstile widget. Rendered explicitly by JS when this page is shown. -->
+        <div id="cf-turnstile"></div>
         <button class="btn solid" type="submit" id="contactSend">Send</button>
         <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
@@ -498,11 +502,27 @@
 <script>
   const mobileNav=document.getElementById('mobileNav');
   function closeMobileNav(){mobileNav.classList.remove('open');document.body.classList.remove('menu-open');}
+
+  // ----- Turnstile (contact-form bot check) -----
+  const TURNSTILE_SITEKEY='0x4AAAAAADtZTNZ-wWx-gqi2'; // public site key, safe in client code
+  let tsWidgetId=null, tsReady=false;
+  function renderTurnstile(){
+    // Render once, only after the script has loaded and the widget isn't already up.
+    if(tsWidgetId!==null||!tsReady||!window.turnstile) return;
+    tsWidgetId=turnstile.render('#cf-turnstile',{sitekey:TURNSTILE_SITEKEY,theme:'dark'});
+  }
+  // Fired by the Turnstile script once loaded (see ?onload= in its <script> src).
+  window.onTurnstileLoad=function(){
+    tsReady=true;
+    if(document.getElementById('contact').classList.contains('active')) renderTurnstile();
+  };
+
   function showPage(id){
     if(!id||!document.getElementById(id)) id='home';
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.menu button,.mobile-nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    if(id==='contact') renderTurnstile(); // mount the widget the first time Contact is shown
     closeMobileNav();
     window.scrollTo({top:0,behavior:'instant'});
   }
@@ -529,11 +549,18 @@
     e.preventDefault();
     const btn=document.getElementById('contactSend');
     const status=document.getElementById('contactStatus');
+    // Require a Turnstile token before doing anything else.
+    const token=(window.turnstile&&tsWidgetId!==null)?turnstile.getResponse(tsWidgetId):'';
+    if(!token){
+      status.className='form-status err';
+      status.textContent='Please complete the verification check below, then hit Send.';
+      return;
+    }
     const payload={
       name:document.getElementById('nm').value,
       email:document.getElementById('em').value,
       message:document.getElementById('msg').value,
-      website:document.getElementById('website').value
+      cfToken:token
     };
     btn.disabled=true;
     status.className='form-status';
@@ -553,6 +580,8 @@
       status.textContent='Something went wrong. You can email us directly at hello@balboa-afrojazz.com';
     }finally{
       btn.disabled=false;
+      // Tokens are single-use, so issue a fresh one for the next submit.
+      if(window.turnstile&&tsWidgetId!==null) turnstile.reset(tsWidgetId);
     }
   }
 </script>
