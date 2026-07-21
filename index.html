@@ -13,20 +13,20 @@
 <meta name="theme-color" content="#0F0F16">
 <meta name="referrer" content="strict-origin-when-cross-origin"><!-- YouTube embeds need a valid referrer or they throw Error 153 -->
 <title>Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven</title>
-<meta name="description" content="Balboa is an 8-piece Afrofunk and jazz live band from Eindhoven, Netherlands. Originals inspired by Ebo Taylor, Fela Kuti and Hugh Masekela, with a hip-hop edge.">
+<meta name="description" content="Balboa is an 8-piece Afrofunk and jazz live band from Eindhoven, Netherlands. Originals inspired by Ebo Taylor, Fela Kuti and Hugh Masekela, with a hip-hop edge. AfroFunk. Jazz. Dance!">
 
 <!-- Open Graph + Twitter for link previews on FB / IG / WhatsApp. -->
 <!-- Absolute URLs point at the live custom domain. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Balboa - Afrojazz">
 <meta property="og:title" content="Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven">
-<meta property="og:description" content="8-piece Afrofunk and jazz live band from Eindhoven.">
+<meta property="og:description" content="8-piece Afrofunk and jazz live band from Eindhoven. AfroFunk. Jazz. Dance!">
 <meta property="og:image" content="https://balboa-afrojazz.com/balboa.jpg">
 <meta property="og:url" content="https://balboa-afrojazz.com/">
 <link rel="canonical" href="https://balboa-afrojazz.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Balboa - Afrojazz | Afrofunk &amp; Jazz live band, Eindhoven">
-<meta name="twitter:description" content="8-piece Afrofunk and jazz live band from Eindhoven.">
+<meta name="twitter:description" content="8-piece Afrofunk and jazz live band from Eindhoven. AfroFunk. Jazz. Dance!">
 <meta name="twitter:image" content="https://balboa-afrojazz.com/balboa.jpg">
 
 <!-- Favicon: inline SVG (orange B on charcoal), no extra file needed. -->
@@ -36,10 +36,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-<!-- Cloudflare Turnstile (contact-form bot check). Explicit render so the widget
-     mounts only when the (SPA-hidden) contact page is shown. -->
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script>
 <style>
   :root{
     --bg:#0F0F16;
@@ -170,6 +166,15 @@
   .video-card{aspect-ratio:16/9;border-radius:12px;overflow:hidden;position:relative;
     border:1px solid var(--line);background:#000;transition:transform .25s,border-color .25s}
   .video-card:hover{transform:translateY(-3px);border-color:var(--orange)}
+  .video-card.link{cursor:pointer}
+  .video-card .thumb{position:absolute;inset:0;background:linear-gradient(135deg,#2a2320,#101018);
+    display:grid;place-items:center}
+  .video-card .play{width:62px;height:44px;background:rgba(232,93,44,.92);border-radius:11px;display:grid;place-items:center;position:relative;z-index:2}
+  .video-card .play::after{content:"";border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+  .video-card .label{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px 16px;
+    background:linear-gradient(transparent,rgba(0,0,0,.85));font-family:var(--mono)}
+  .video-card .label b{display:block;font-size:14px;color:#fff;font-weight:700}
+  .video-card .label small{color:var(--muted);font-size:12px}
   .video-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:3}
   .media-note{margin-top:26px;font-family:var(--mono);font-size:13px;color:var(--muted)}
 
@@ -210,8 +215,8 @@
   .form-status{font-family:var(--mono);font-size:13px;margin-top:14px;min-height:18px;color:var(--muted)}
   .form-status.ok{color:var(--orange-soft)}
   .form-status.err{color:#ff8a6b}
-  /* Turnstile widget sits between the message field and the Send button. */
-  #cf-turnstile{margin:4px 0 18px}
+  /* Honeypot: off-screen, invisible to humans, bots tend to fill it. */
+  .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
   footer{text-align:center;padding:60px 0 40px;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.05em}
   footer .dot{color:var(--orange)}
@@ -392,19 +397,22 @@
       <div class="video-grid">
 
         <div class="video-card">
-          <iframe src="https://www.youtube-nocookie.com/embed/HV8hV-pQ7Vo" title="Balboa - Afrojazz live video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/4idt6M5sRl4" title="Balboa - Afrojazz, Story" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-card">
-          <iframe src="https://www.youtube-nocookie.com/embed/DyxTXIuUKAk" title="Balboa - Afrojazz live video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/A0Bx16vihzA" title="Balboa - Afrojazz, Boda Boda" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-card">
-          <iframe src="https://www.youtube-nocookie.com/embed/A0Bx16vihzA" title="Balboa - Afrojazz live video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/T18svsL9cnc" title="Balboa - Afrojazz, Carolina" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-card">
-          <iframe src="https://www.youtube-nocookie.com/embed/T18svsL9cnc" title="Balboa - Afrojazz live video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/E1bzwn3Lyzk" title="Balboa - Afrojazz, Firebon" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-card">
-          <iframe src="https://www.youtube-nocookie.com/embed/4idt6M5sRl4" title="Balboa - Afrojazz live video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/OW-z_q29DSc" title="Balboa - Afrojazz, Transcendence (Bosnia)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+        <div class="video-card">
+          <iframe src="https://www.youtube-nocookie.com/embed/fDmiVpxNZLg" title="Balboa - Afrojazz, Jazz in Catstown" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <div class="video-card">
           <iframe src="https://www.youtube-nocookie.com/embed/QCsfSIwbmFo" title="Balboa - Afrojazz, The Isolation Sessions #85" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -424,6 +432,12 @@
                   referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         (VIDEO_ID is the bit after watch?v= or youtu.be/ in the YouTube URL.)
+
+        Click-through card (for videos that can't embed, e.g. Facebook). Note class "link":
+        <div class="video-card link" onclick="window.open('PAGE_URL','_blank')">
+          <div class="thumb"><div class="play"></div></div>
+          <div class="label"><b>Title</b><small>Venue</small></div>
+        </div>
       -->
 
     </div>
@@ -440,8 +454,8 @@
 
     <div class="shows-block">
       <h3>Upcoming</h3>
+      <div class="gig"><span class="date">25 Jul</span><span class="venue">STOOK! Festival</span><span class="city">Eindhoven, NL</span></div>
       <div class="gig"><span class="date">29 Jul</span><span class="venue"><a href="https://www.totaalfestival.nl/programma/woensdag/balboa" target="_blank" rel="noopener">TotaalFestival</a></span><span class="city">Bladel, NL</span></div>
-      <div class="gig"><span class="date">TBA</span><span class="venue">STOOK! Festival</span><span class="city">Eindhoven, NL</span></div>
     </div>
 
     <div class="shows-block">
@@ -464,8 +478,8 @@
         <div class="field"><label>Name</label><input id="nm" type="text" required></div>
         <div class="field"><label>Email</label><input id="em" type="email" required></div>
         <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
-        <!-- Turnstile widget. Rendered explicitly by JS when this page is shown. -->
-        <div id="cf-turnstile"></div>
+        <!-- Honeypot: hidden from real users. Leave empty. Bots that fill it get silently dropped. -->
+        <div class="hp-field" aria-hidden="true"><label>Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <button class="btn solid" type="submit" id="contactSend">Send</button>
         <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
@@ -487,27 +501,11 @@
 <script>
   const mobileNav=document.getElementById('mobileNav');
   function closeMobileNav(){mobileNav.classList.remove('open');document.body.classList.remove('menu-open');}
-
-  // ----- Turnstile (contact-form bot check) -----
-  const TURNSTILE_SITEKEY='0x4AAAAAADtZTNZ-wWx-gqi2'; // public site key, safe in client code
-  let tsWidgetId=null, tsReady=false;
-  function renderTurnstile(){
-    // Render once, only after the script has loaded and the widget isn't already up.
-    if(tsWidgetId!==null||!tsReady||!window.turnstile) return;
-    tsWidgetId=turnstile.render('#cf-turnstile',{sitekey:TURNSTILE_SITEKEY,theme:'dark'});
-  }
-  // Fired by the Turnstile script once loaded (see ?onload= in its <script> src).
-  window.onTurnstileLoad=function(){
-    tsReady=true;
-    if(document.getElementById('contact').classList.contains('active')) renderTurnstile();
-  };
-
   function showPage(id){
     if(!id||!document.getElementById(id)) id='home';
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.menu button,.mobile-nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
-    if(id==='contact') renderTurnstile(); // mount the widget the first time Contact is shown
     closeMobileNav();
     window.scrollTo({top:0,behavior:'instant'});
   }
@@ -534,18 +532,11 @@
     e.preventDefault();
     const btn=document.getElementById('contactSend');
     const status=document.getElementById('contactStatus');
-    // Require a Turnstile token before doing anything else.
-    const token=(window.turnstile&&tsWidgetId!==null)?turnstile.getResponse(tsWidgetId):'';
-    if(!token){
-      status.className='form-status err';
-      status.textContent='Please complete the verification check below, then hit Send.';
-      return;
-    }
     const payload={
       name:document.getElementById('nm').value,
       email:document.getElementById('em').value,
       message:document.getElementById('msg').value,
-      cfToken:token
+      website:document.getElementById('website').value
     };
     btn.disabled=true;
     status.className='form-status';
@@ -565,8 +556,6 @@
       status.textContent='Something went wrong. You can email us directly at hello@balboa-afrojazz.com';
     }finally{
       btn.disabled=false;
-      // Tokens are single-use, so issue a fresh one for the next submit.
-      if(window.turnstile&&tsWidgetId!==null) turnstile.reset(tsWidgetId);
     }
   }
 </script>
