@@ -14,40 +14,23 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
   Transcendence (Bosnia), Jazz in Catstown, Isolation Sessions #85), brand-colored hero
   socials, Bandcamp player, Shows, Contact form.
 - Contact form posts to `/api/contact`; `src/index.js` sends it via Email Routing.
+- Contact form protection: Turnstile widget (loads when Contact opens) plus a server-side
+  honeypot. Needs the `TURNSTILE_SECRET` Worker secret, or every real message fails.
 - `sitemap.xml` + `robots.txt` live. Google Search Console set up under the band Google
   account. DMARC per Tugan at `p=quarantine`, SPF + DKIM on.
 
 **Not what we thought (found in the audit)**
-- **Turnstile is NOT live.** The Turnstile-verifying Worker was uploaded to the repo
-  root as `index.js` (2026-06-30) instead of `src/index.js`. `wrangler.jsonc` deploys
-  `src/index.js`, which has no Turnstile. `index.html` has no widget either.
-- **Honeypot is front-end only.** `index.html` sends the hidden `website` field, but
-  neither Worker version checks it. So bots are currently not filtered at all.
 - **Security headers are not in either Worker.** They may be set in the Cloudflare
   dashboard (Transform Rules) or not at all. Needs a check in DevTools.
-- **Stray root `index.js` is publicly served** at `/index.js` (not in `.assetsignore`).
-  No secrets in it, but it's clutter and confusing.
 - Repo is **Public** (old notes said private). Decision pending.
 - `README.md` is still the empty "Initial commit" placeholder.
 
 ## Backlog (in order)
 
-1. **Contact form protection, done properly** (one commit, ships together):
-   - Merge Turnstile verification + server-side honeypot check into `src/index.js`.
-   - Add the Turnstile widget to the form in `index.html` and send its token as
-     `cfToken` in the payload.
-   - Delete the root `index.js`.
-   - Pre-req (Tugan, dashboard): confirm the Turnstile widget still exists with
-     `balboa-afrojazz.com` as hostname, and that `TURNSTILE_SECRET` is set as a Worker
-     secret. Site key on record: `0x4AAAAAADtZTNZ-wWx-gqi2` (public by design).
-   - Verify: real test message lands in the band inbox; a submission with no token
-     is rejected.
-   - Trap: the Turnstile Worker rejects any request without a token. Never deploy the
-     Worker change without the widget in the HTML, or every real message fails.
-2. **Security headers.** Check DevTools > Network > document > Response Headers on the
+1. **Security headers.** Check DevTools > Network > document > Response Headers on the
    live site. If missing, add them in the Worker (wrap the `ASSETS.fetch` response).
-3. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
-4. Optional: `/update-shows` custom command in `.claude/commands/`.
+2. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
+3. Optional: `/update-shows` custom command in `.claude/commands/`.
 
 ## Parked / later
 - No-code CMS (Sveltia vs Decap). Sveltia 1.0 slipped to late 2026. Content is baked

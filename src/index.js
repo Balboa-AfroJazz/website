@@ -25,6 +25,23 @@ async function handleContact(request, env) {
   try {
     const data = await request.json();
 
+    // Honeypot: real users never see this field, so anything in it is a bot.
+    // Report success so the bot learns nothing, but send no email.
+    if (String(data.website ?? "").trim()) {
+      return json({ ok: true });
+    }
+
+    // Turnstile: verify the token before doing anything else. A real human
+    // gets a valid token from the widget. Without one, no email is sent.
+    const verified = await verifyTurnstile(
+      data.cfToken,
+      request.headers.get("CF-Connecting-IP"),
+      env
+    );
+    if (!verified) {
+      return json({ ok: false, error: "Verification failed" }, 403);
+    }
+
     // Strip CR/LF from header fields to prevent header injection.
     const clean = (s) => String(s ?? "").replace(/[\r\n]+/g, " ").trim();
     const name    = clean(data.name).slice(0, 120);
@@ -59,6 +76,23 @@ async function handleContact(request, env) {
   } catch (err) {
     return json({ ok: false, error: "Send failed" }, 500);
   }
+}
+
+// Validate a Turnstile token against Cloudflare's Siteverify API.
+// Returns true only on a genuine pass. Uses the TURNSTILE_SECRET Worker secret.
+async function verifyTurnstile(token, ip, env) {
+  if (!token) return false;
+  const form = new URLSearchParams();
+  form.append("secret", env.TURNSTILE_SECRET);
+  form.append("response", token);
+  if (ip) form.append("remoteip", ip);
+
+  const resp = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    { method: "POST", body: form }
+  );
+  const outcome = await resp.json();
+  return outcome.success === true;
 }
 
 function json(obj, status = 200) {

@@ -212,6 +212,7 @@
   .contact-side p{color:#d7d4ce;margin-bottom:18px}
   .contact-side a{color:var(--orange);text-decoration:none;font-family:var(--mono)}
   .contact-side a:hover{text-decoration:underline}
+  #turnstileBox{margin-bottom:18px;min-height:65px}
   .form-status{font-family:var(--mono);font-size:13px;margin-top:14px;min-height:18px;color:var(--muted)}
   .form-status.ok{color:var(--orange-soft)}
   .form-status.err{color:#ff8a6b}
@@ -482,6 +483,7 @@
         <div class="field"><label>Message</label><textarea id="msg" required></textarea></div>
         <!-- Honeypot: hidden from real users. Leave empty. Bots that fill it get silently dropped. -->
         <div class="hp-field" aria-hidden="true"><label>Leave this field empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+        <div id="turnstileBox"></div>
         <button class="btn solid" type="submit" id="contactSend">Send</button>
         <p id="contactStatus" class="form-status" role="status" aria-live="polite"></p>
       </form>
@@ -503,6 +505,24 @@
 <script>
   const mobileNav=document.getElementById('mobileNav');
   function closeMobileNav(){mobileNav.classList.remove('open');document.body.classList.remove('menu-open');}
+
+  // Turnstile spam check. The script loads only when Contact opens, so the widget
+  // never sits in a hidden page and other visitors don't load it.
+  // The site key is public by design. The secret lives only in the Cloudflare dashboard.
+  const TURNSTILE_SITE_KEY='0x4AAAAAADtZTNZ-wWx-gqi2';
+  let turnstileWidget=null;
+  function loadTurnstile(){
+    if(document.getElementById('turnstileScript')) return;
+    const s=document.createElement('script');
+    s.id='turnstileScript';
+    s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=renderTurnstile';
+    s.async=true;
+    document.head.appendChild(s);
+  }
+  function renderTurnstile(){
+    turnstileWidget=turnstile.render('#turnstileBox',{sitekey:TURNSTILE_SITE_KEY,theme:'dark',size:'flexible'});
+  }
+
   function showPage(id){
     if(!id||!document.getElementById(id)) id='home';
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -510,6 +530,7 @@
     document.querySelectorAll('.menu button,.mobile-nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
     closeMobileNav();
     window.scrollTo({top:0,behavior:'instant'});
+    if(id==='contact') loadTurnstile();
   }
   function currentId(){return location.hash.slice(1)||'home';}
   function go(id){
@@ -534,11 +555,18 @@
     e.preventDefault();
     const btn=document.getElementById('contactSend');
     const status=document.getElementById('contactStatus');
+    const cfToken=turnstileWidget===null?'':turnstile.getResponse(turnstileWidget);
+    if(!cfToken){
+      status.className='form-status err';
+      status.textContent='Still checking you are human. Try again in a moment, or email us at hello@balboa-afrojazz.com';
+      return;
+    }
     const payload={
       name:document.getElementById('nm').value,
       email:document.getElementById('em').value,
       message:document.getElementById('msg').value,
-      website:document.getElementById('website').value
+      website:document.getElementById('website').value,
+      cfToken
     };
     btn.disabled=true;
     status.className='form-status';
@@ -558,6 +586,7 @@
       status.textContent='Something went wrong. You can email us directly at hello@balboa-afrojazz.com';
     }finally{
       btn.disabled=false;
+      turnstile.reset(turnstileWidget); // tokens are single-use, so get a fresh one
     }
   }
 </script>
