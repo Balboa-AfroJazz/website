@@ -28,7 +28,6 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 - **Stray root `index.js` is publicly served** at `/index.js` (not in `.assetsignore`).
   No secrets in it, but it's clutter and confusing.
 - Repo is **Public** (old notes said private). Decision pending.
-- Stale branch `cloudflare/workers-autoconfig` (auto-created by Cloudflare, 4 months old).
 - `README.md` is still the empty "Initial commit" placeholder.
 
 ## Backlog (in order)
@@ -48,11 +47,7 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 2. **Security headers.** Check DevTools > Network > document > Response Headers on the
    live site. If missing, add them in the Worker (wrap the `ASSETS.fetch` response).
 3. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
-4. Delete branch `cloudflare/workers-autoconfig`.
-5. **Successor README** (`README.md`): what the site is, how to edit shows/videos, how
-   deploy works, which accounts own what (GitHub org, Cloudflare, Search Console, all on
-   the band hotmail), where secrets live.
-6. Optional: `/update-shows` custom command in `.claude/commands/`.
+4. Optional: `/update-shows` custom command in `.claude/commands/`.
 
 ## Parked / later
 - No-code CMS (Sveltia vs Decap). Sveltia 1.0 slipped to late 2026. Content is baked
