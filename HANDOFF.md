@@ -47,13 +47,12 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
      Worker change without the widget in the HTML, or every real message fails.
 2. **Security headers.** Check DevTools > Network > document > Response Headers on the
    live site. If missing, add them in the Worker (wrap the `ASSETS.fetch` response).
-3. **Shows: move Jazz in Catstown (16 Aug) to Past**, bump `sitemap.xml` `<lastmod>`.
-4. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
-5. Delete branch `cloudflare/workers-autoconfig`.
-6. **Successor README** (`README.md`): what the site is, how to edit shows/videos, how
+3. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
+4. Delete branch `cloudflare/workers-autoconfig`.
+5. **Successor README** (`README.md`): what the site is, how to edit shows/videos, how
    deploy works, which accounts own what (GitHub org, Cloudflare, Search Console, all on
    the band hotmail), where secrets live.
-7. Optional: `/update-shows` custom command in `.claude/commands/`.
+6. Optional: `/update-shows` custom command in `.claude/commands/`.
 
 ## Parked / later
 - No-code CMS (Sveltia vs Decap). Sveltia 1.0 slipped to late 2026. Content is baked
