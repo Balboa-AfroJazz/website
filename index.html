@@ -558,7 +558,7 @@
     const cfToken=turnstileWidget===null?'':turnstile.getResponse(turnstileWidget);
     if(!cfToken){
       status.className='form-status err';
-      status.textContent='Still checking you are human. Try again in a moment, or email us at hello@balboa-afrojazz.com';
+      status.textContent='Please complete the check above, or email us at hello@balboa-afrojazz.com';
       return;
     }
     const payload={
