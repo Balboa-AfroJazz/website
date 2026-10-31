@@ -10,9 +10,9 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 
 **Live and working**
 - Site live at https://balboa-afrojazz.com (apex + www), HTTPS forced.
-- `index.html` is the v1.0 content: 7 videos (Story, Boda Boda, Carolina, Firebon,
-  Transcendence (Bosnia), Jazz in Catstown, Isolation Sessions #85), brand-colored hero
-  socials, Bandcamp player, Shows, Contact form.
+- `index.html` is the v1.0 content: 9 videos (Dem wan kilo, Boda Boda live promo, Story,
+  Carolina, Firebon, Transcendence (Bosnia), Jazz in Catstown, Boda Boda, Isolation
+  Sessions #85), brand-colored hero socials, Bandcamp player, Shows, Contact form.
 - Contact form posts to `/api/contact`; `src/index.js` sends it via Email Routing.
 - Contact form protection: Turnstile widget (loads when Contact opens) plus a server-side
   honeypot. Needs the `TURNSTILE_SECRET` Worker secret, or every real message fails.
