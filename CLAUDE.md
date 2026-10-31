@@ -3,7 +3,7 @@
 Read this first, every session. Then read `HANDOFF.md` for current state and backlog.
 
 ## What this is
-The website for **Balboa - Afrojazz**, an 8-piece afrofunk/afrojazz live band from
+The website for **Balboa - Afrojazz**, a 7-piece afrofunk/afrojazz live band from
 Eindhoven, NL. Live at https://balboa-afrojazz.com. Maintained by **Tugan** (bass/keys
 in the band). Long-term goal: hand the site to a non-technical bandmate, so keep things
 simple, documented, and free of build steps.

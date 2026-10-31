@@ -44,7 +44,7 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 ## Facts
 - EP "In the Ghetto", released 1 May 2024, 6 tracks, Daltoon Studio, Eindhoven.
   Bandcamp album id `3631149298`.
-- Lineup: Rob Vermaelen (Rap/MC), Marco Krijger (Hammond), Kenneth a Joe Liauw (Drums),
+- Lineup: Marco Krijger (Hammond), Kenneth a Joe Liauw (Drums),
   Joost van Loon (Guitar), Tugan Turgut (Bass), Onno Buijs (Sax), Christophe Millet
   (Percussion), Trumpet seat open.
 - Accounts: GitHub org `Balboa-AfroJazz`, Cloudflare, and Google Search Console all on
