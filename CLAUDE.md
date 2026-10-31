@@ -70,6 +70,9 @@ the *secret* key lives only as a Worker secret in the dashboard.
 - **`.assetsignore`** decides what is NOT public. Currently: `wrangler.jsonc`,
   `.assetsignore`, `src`, `*.md`, `package*.json`, `.gitignore`. **Anything else in the
   repo root is publicly downloadable.** Check this list whenever you add a file.
+- **`_headers`** sets the security headers. Cloudflare reads it and never serves it. It must
+  stay a file, not Worker code: static files are served without running the Worker, so
+  headers set in `src/index.js` would never reach the pages.
 - `sitemap.xml` (homepage only, since hash routes are not separate URLs) + `robots.txt`.
 
 ## Gotchas (hard-won)

@@ -16,21 +16,19 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 - Contact form posts to `/api/contact`; `src/index.js` sends it via Email Routing.
 - Contact form protection: Turnstile widget (loads when Contact opens) plus a server-side
   honeypot. Needs the `TURNSTILE_SECRET` Worker secret, or every real message fails.
+- Security headers set in `_headers` (no CSP, deliberately: the inline script would force
+  `'unsafe-inline'`, and the site renders no user content).
 - `sitemap.xml` + `robots.txt` live. Google Search Console set up under the band Google
   account. DMARC per Tugan at `p=quarantine`, SPF + DKIM on.
 
 **Not what we thought (found in the audit)**
-- **Security headers are not in either Worker.** They may be set in the Cloudflare
-  dashboard (Transform Rules) or not at all. Needs a check in DevTools.
 - Repo is **Public** (old notes said private). Decision pending.
 - `README.md` is still the empty "Initial commit" placeholder.
 
 ## Backlog (in order)
 
-1. **Security headers.** Check DevTools > Network > document > Response Headers on the
-   live site. If missing, add them in the Worker (wrap the `ASSETS.fetch` response).
-2. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
-3. Optional: `/update-shows` custom command in `.claude/commands/`.
+1. **Repo visibility** decision (public vs private). GitHub settings, Tugan's call.
+2. Optional: `/update-shows` custom command in `.claude/commands/`.
 
 ## Parked / later
 - No-code CMS (Sveltia vs Decap). Sveltia 1.0 slipped to late 2026. Content is baked
