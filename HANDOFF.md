@@ -44,6 +44,8 @@ Verified by reading the repo (`main` @ `ae3a51f`) and the live site.
 ## Facts
 - EP "In the Ghetto", released 1 May 2024, 6 tracks, Daltoon Studio, Eindhoven.
   Bandcamp album id `3631149298`.
+- EP cover and mobile-menu artwork (`balboa-dropdown.jpg`): painting by Joshua van Iersel
+  (2022). Credited under the EP blurb on the Media page.
 - Lineup: Marco Krijger (Hammond), Kenneth a Joe Liauw (Drums),
   Joost van Loon (Guitar), Tugan Turgut (Bass), Onno Buijs (Sax), Christophe Millet
   (Percussion), Trumpet seat open.
